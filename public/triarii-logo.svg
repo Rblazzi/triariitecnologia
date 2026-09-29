@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-24 -14 434 136" width="868" height="272">
+  <!-- Logo Triarii Tecnologia em vetor. Mesma geometria de src/dados/logo.ts. -->
+  <defs>
+    <linearGradient id="prata" gradientUnits="userSpaceOnUse" x1="0" y1="4" x2="0" y2="63">
+      <stop offset="0" stop-color="#f0f0f1"/>
+      <stop offset="0.55" stop-color="#c9cacd"/>
+      <stop offset="1" stop-color="#8f9196"/>
+    </linearGradient>
+    <linearGradient id="bronze" gradientUnits="userSpaceOnUse" x1="0" y1="27.6" x2="0" y2="63">
+      <stop offset="0" stop-color="#e3a758"/>
+      <stop offset="1" stop-color="#a96f2d"/>
+    </linearGradient>
+    <clipPath id="base"><rect x="-10" y="-10" width="420" height="73"/></clipPath>
+  </defs>
+  <rect x="-24" y="-14" width="434" height="136" fill="#050507"/>
+  <g fill="url(#prata)">
+    <path d="M0 7H61V18H37V63H24V18H0Z"/>
+    <path d="M75 7H88V63H75Z"/>
+    <path d="M152 18L165 20.5V63H152Z"/>
+    <path d="M179 63L214 4L249 63H235L214 27.6L193 63Z"/>
+    <path d="M259 7H272V63H259Z"/>
+    <path d="M341 18L354 20.5V63H341Z"/>
+    <path d="M373 18L386 20.5V63H373Z"/>
+  </g>
+  <g fill="none" stroke="url(#prata)" stroke-width="13" clip-path="url(#base)">
+    <path d="M81.5 13.5H115A10.5 10.5 0 0 1 115 34.5H81.5"/>
+    <path d="M106 36L134.7 67"/>
+    <path d="M265.5 13.5H299A10.5 10.5 0 0 1 299 34.5H265.5"/>
+    <path d="M290 36L318.7 67"/>
+  </g>
+  <g fill="url(#bronze)">
+    <path d="M204.5 63L214 45L223.5 63Z"/>
+    <path d="M152 7H165V17.5L152 15Z"/>
+    <path d="M341 7H354V17.5L341 15Z"/>
+    <path d="M373 7H386V17.5L373 15Z"/>
+  </g>
+  <g stroke="#c98a3e" stroke-width="3">
+    <line x1="1" y1="90" x2="58" y2="90"/>
+    <line x1="329" y1="90" x2="386" y2="90"/>
+  </g>
+  <text x="194" y="97" text-anchor="middle" fill="#e6e7ea" font-family="Montserrat, Geist, Arial, sans-serif" font-size="19" letter-spacing="11.6">TECNOLOGIA</text>
+</svg>

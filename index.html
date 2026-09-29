@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Título e descrição são trocados por página no build (scripts/prerender.mjs) e na navegação. -->
+    <title>Triarii Tecnologia</title>
+    <meta
+      name="description"
+      content="Desenvolvimento de sistemas, infraestrutura em nuvem, dados e consultoria técnica para empresas que não podem parar."
+    />
+    <meta property="og:title" content="Triarii Tecnologia" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#07080F" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600&family=Unbounded:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      // Decide antes da primeira pintura se a abertura roda: só na primeira
+      // visita da sessão, entrando pela home, e nunca com movimento reduzido.
+      try {
+        if (
+          location.pathname === '/' &&
+          !sessionStorage.getItem('triarii-abertura') &&
+          !matchMedia('(prefers-reduced-motion: reduce)').matches
+        ) {
+          document.documentElement.classList.add('tem-abertura');
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="raiz"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

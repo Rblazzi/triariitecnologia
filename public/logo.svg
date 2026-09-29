@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Ícone: o A do logo Triarii com a ponta de lança em bronze -->
+  <defs>
+    <linearGradient id="p" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0f0f1"/>
+      <stop offset="1" stop-color="#8f9196"/>
+    </linearGradient>
+    <linearGradient id="b" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e3a758"/>
+      <stop offset="1" stop-color="#a96f2d"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="#07080f"/>
+  <g transform="translate(4.2 4.6) scale(0.34)">
+    <path d="M0 63L35 4L70 63H56L35 27.6L14 63Z" fill="url(#p)"/>
+    <path d="M25.5 63L35 45L44.5 63Z" fill="url(#b)"/>
+  </g>
+</svg>
