@@ -164,28 +164,46 @@ export function Inicio() {
             <li>
               <a href={`mailto:${CONTATO.email}`}>{CONTATO.email}</a>
             </li>
-            <li>
-              <a href={CONTATO.whatsapp} rel="noopener">
-                WhatsApp
-              </a>
-            </li>
+            {CONTATO.whatsapp && (
+              <li>
+                <a href={CONTATO.whatsapp} target="_blank" rel="noopener noreferrer">
+                  WhatsApp <span className="sr-only">(abre em nova aba)</span>
+                </a>
+              </li>
+            )}
           </ul>
         </div>
 
         <form className="form" ref={form} noValidate>
           <div className="campo">
             <label htmlFor="f-nome">Seu nome</label>
-            <input id="f-nome" name="nome" autoComplete="name" required />
+            <input id="f-nome" name="nome" autoComplete="name" maxLength={120} required />
             <p className="campo__erro" data-erro-para="nome" />
           </div>
           <div className="campo">
-            <label htmlFor="f-empresa">Empresa</label>
-            <input id="f-empresa" name="empresa" autoComplete="organization" />
+            <label htmlFor="f-empresa">
+              Empresa <span className="campo__opcional">(opcional)</span>
+            </label>
+            <input id="f-empresa" name="empresa" autoComplete="organization" maxLength={120} />
           </div>
           <div className="campo">
             <label htmlFor="f-email">E-mail</label>
-            <input id="f-email" name="email" type="email" autoComplete="email" required />
+            <input
+              id="f-email"
+              name="email"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              spellCheck={false}
+              maxLength={254}
+              required
+            />
             <p className="campo__erro" data-erro-para="email" />
+          </div>
+          {/* Campo-isca contra robôs: fora da tela e fora da navegação por teclado. */}
+          <div className="campo campo--isca" aria-hidden="true">
+            <label htmlFor="f-site">Deixe este campo vazio</label>
+            <input id="f-site" name="site" tabIndex={-1} autoComplete="off" />
           </div>
           <div className="campo">
             <label htmlFor="f-servico">Assunto</label>
@@ -198,7 +216,7 @@ export function Inicio() {
           </div>
           <div className="campo campo--largo">
             <label htmlFor="f-mensagem">O que está acontecendo?</label>
-            <textarea id="f-mensagem" name="mensagem" rows={5} required />
+            <textarea id="f-mensagem" name="mensagem" rows={5} maxLength={4000} required />
             <p className="campo__erro" data-erro-para="mensagem" />
           </div>
           <div className="form__rodape">

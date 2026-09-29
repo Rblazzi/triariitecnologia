@@ -1,3 +1,8 @@
+// Fontes servidas pelo próprio site (sem Google Fonts: nenhum IP de visitante vai
+// para terceiros, e a página não depende de outro domínio para carregar).
+import '@fontsource-variable/unbounded';
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
 import './style.css';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';

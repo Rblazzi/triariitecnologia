@@ -41,6 +41,11 @@ export function Privacidade() {
             da LGPD).
           </p>
           <p>Não vendemos, alugamos nem compartilhamos seus dados para fins de marketing.</p>
+          <p>
+            Para entregar a mensagem no nosso e-mail, o formulário usa o serviço Web3Forms, que atua só
+            como intermediário do envio. As fontes e demais arquivos do site são servidos pelo próprio
+            site, sem enviar seus dados a outros serviços.
+          </p>
         </section>
 
         <section className="revelar">

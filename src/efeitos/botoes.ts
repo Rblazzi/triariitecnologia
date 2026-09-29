@@ -38,17 +38,23 @@ export function iniciarBotoes(): void {
     return s;
   };
 
-  window.addEventListener('pointermove', (e) => {
-    const botoes = document.querySelectorAll<HTMLElement>('.botao');
-    for (const b of botoes) {
+  // No máximo uma medição de layout por quadro, e só dos botões visíveis.
+  let ultimo: PointerEvent | null = null;
+  let agendado = 0;
+  const medir = (): void => {
+    agendado = 0;
+    const e = ultimo;
+    if (!e) return;
+    for (const b of document.querySelectorAll<HTMLElement>('.botao')) {
+      if (!b.offsetParent) continue; // escondido (display: none)
       const s = estadoDe(b);
+      // Posição sem o deslocamento do próprio ímã, para ele não "fugir" do cursor.
       const r = s.b.getBoundingClientRect();
-      const cx = r.left + r.width / 2;
-      const cy = r.top + r.height / 2;
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
-      const perto =
-        Math.abs(dx) < r.width / 2 + RAIO && Math.abs(dy) < r.height / 2 + RAIO;
+      const tx = Number(gsap.getProperty(s.b, 'x')) || 0;
+      const ty = Number(gsap.getProperty(s.b, 'y')) || 0;
+      const dx = e.clientX - (r.left - tx + r.width / 2);
+      const dy = e.clientY - (r.top - ty + r.height / 2);
+      const perto = Math.abs(dx) < r.width / 2 + RAIO && Math.abs(dy) < r.height / 2 + RAIO;
       if (perto) {
         s.preso = true;
         s.x(dx * 0.28);
@@ -58,7 +64,15 @@ export function iniciarBotoes(): void {
         gsap.to(s.b, { x: 0, y: 0, duration: 0.9, ease: 'elastic.out(1, 0.35)' });
       }
     }
-  });
+  };
+  window.addEventListener(
+    'pointermove',
+    (e) => {
+      ultimo = e;
+      if (!agendado) agendado = requestAnimationFrame(medir);
+    },
+    { passive: true },
+  );
 }
 
 function faiscas(x: number, y: number, origem: HTMLElement): void {

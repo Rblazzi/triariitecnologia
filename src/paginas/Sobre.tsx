@@ -1,6 +1,6 @@
-import { GradePrincipios } from '../componentes/Blocos';
+import { GradeEquipe, GradePrincipios } from '../componentes/Blocos';
 import { Chamada } from '../componentes/Chamada';
-import { NO_QUE_ACREDITAMOS } from '../dados/conteudo';
+import { EQUIPE, NO_QUE_ACREDITAMOS } from '../dados/conteudo';
 
 export function Sobre() {
   return (
@@ -39,6 +39,16 @@ export function Sobre() {
           </h2>
         </div>
         <GradePrincipios itens={NO_QUE_ACREDITAMOS} />
+      </section>
+
+      <section className="equipe" aria-labelledby="equipe-titulo">
+        <div className="secao__cabeca">
+          <p className="rotulo">Quem responde</p>
+          <h2 id="equipe-titulo" className="secao__titulo">
+            As pessoas por trás da Triarii.
+          </h2>
+        </div>
+        <GradeEquipe pessoas={EQUIPE} />
       </section>
 
       <Chamada

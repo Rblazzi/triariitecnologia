@@ -11,6 +11,7 @@
 //              (data-forma-lado="direita" para o lado direito)
 // No fim da página, sempre: a palavra TRIARII do logo, no rodapé.
 
+import { criarRobo } from './robo';
 import {
   BASE,
   CAIXA_MARCA,
@@ -680,11 +681,16 @@ export interface Palco {
 }
 
 export function iniciarParticulas(palco: HTMLElement): Palco {
+  // Menos partículas em telas estreitas e em aparelhos modestos (poucos núcleos,
+  // pouca memória ou modo de economia de dados).
   const estreitoInicial = window.innerWidth < 760;
-  const N = estreitoInicial ? 3600 : 7200;
+  const nav = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
+  const modesto =
+    (navigator.hardwareConcurrency || 8) <= 4 || (nav.deviceMemory ?? 8) <= 4 || nav.connection?.saveData === true;
+  const N = Math.round((estreitoInicial ? 3600 : 7200) * (modesto ? 0.55 : 1));
 
   const renderer = new WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' });
-  const pixel = Math.min(window.devicePixelRatio, 1.5);
+  const pixel = Math.min(window.devicePixelRatio, modesto ? 1 : 1.5);
   renderer.setPixelRatio(pixel);
   renderer.setClearColor(0x000000, 0);
   palco.append(renderer.domElement);
@@ -873,12 +879,29 @@ export function iniciarParticulas(palco: HTMLElement): Palco {
   let grupoDestacado = -1;
   let forcaDestaque = 0;
 
+  // O robô legionário que passeia pelo fundo (efeitos/robo.ts).
+  const robo = criarRobo(cena, pixel, estreitoInicial);
+  const escalaRobo = (DISTANCIA - 0.5) / DISTANCIA; // ele flutua no plano z = 0,5
+
   const inicio = performance.now();
+  let anterior = inicio;
   const quadro = (): void => {
     requestAnimationFrame(quadro);
+    const agora = performance.now();
+    const dt = Math.min((agora - anterior) / 1000, 0.05);
+    anterior = agora;
     if (document.hidden) return;
 
-    uniforms.uTempo.value = (performance.now() - inicio) / 1000;
+    robo.atualizar(
+      dt,
+      layout.meiaL * escalaRobo,
+      layout.meiaA * escalaRobo,
+      alvoForca > 0
+        ? { x: alvoMouse.x * layout.meiaL * escalaRobo, y: alvoMouse.y * layout.meiaA * escalaRobo }
+        : null,
+    );
+
+    uniforms.uTempo.value = (agora - inicio) / 1000;
     uniforms.uMouse.value.lerp(alvoMouse, 0.1);
     uniforms.uForca.value += (alvoForca - uniforms.uForca.value) * 0.06;
 

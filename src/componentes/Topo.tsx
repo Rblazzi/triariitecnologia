@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
 import { NAVEGACAO } from '../dados/conteudo';
+import { estado } from '../efeitos/estado';
 import { LogoTriarii } from './LogoTriarii';
 
 // Os links são <a> comuns: o App intercepta os cliques para tocar a transição
@@ -14,8 +15,18 @@ export function Topo() {
   // Fecha o menu ao trocar de página.
   useEffect(() => setAberto(false), [pathname]);
 
+  const parouRolagem = useRef(false);
   useEffect(() => {
     document.documentElement.classList.toggle('menu-aberto', aberto);
+    // Com o menu aberto, o conteúdo por trás não recebe foco, clique nem rolagem.
+    document.querySelectorAll('main, .rodape').forEach((el) => el.toggleAttribute('inert', aberto));
+    if (aberto) {
+      estado.lenis?.stop();
+      parouRolagem.current = true;
+    } else if (parouRolagem.current) {
+      estado.lenis?.start(); // só religa a rolagem que o próprio menu desligou
+      parouRolagem.current = false;
+    }
     if (aberto) nav.current?.querySelector<HTMLElement>('a')?.focus();
     const aoTeclar = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && aberto) {

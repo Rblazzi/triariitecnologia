@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router';
+import { Route, Routes, useLocation, useNavigate, useNavigationType } from 'react-router';
 import { Abertura } from './componentes/Abertura';
 import { LogoTriarii } from './componentes/LogoTriarii';
 import { Rodape } from './componentes/Rodape';
@@ -33,6 +33,7 @@ function rolarPara(hash: string, imediato: boolean): void {
 export function App() {
   const location = useLocation();
   const navigate = useNavigate();
+  const tipoNavegacao = useNavigationType();
   const cortina = useRef<HTMLDivElement>(null);
   const palco = useRef<HTMLDivElement>(null);
   const cobrindo = useRef(false);
@@ -69,19 +70,70 @@ export function App() {
       }
       if (cobrindo.current || !cortina.current) return;
       cobrindo.current = true;
+      guardarRolagem.current();
       cobrir(cortina.current, url.pathname).then(() => navigate(url.pathname + url.hash));
     };
     document.addEventListener('click', aoClicar);
     return () => document.removeEventListener('click', aoClicar);
   }, [navigate]);
 
-  // A cada página: título, rolagem, partículas, revelações e fim da transição.
+  // Guarda a posição de rolagem de cada entrada do histórico, para o "voltar"
+  // do navegador devolver o visitante ao ponto onde estava.
+  // Salva antes da troca: no clique (antes da cortina), no voltar/avançar
+  // (popstate chega antes do React renderizar a página nova) e ao sair do site.
+  const chaveAtual = useRef(location.key);
+  chaveAtual.current = location.key;
+  const guardarRolagem = useRef(() => {
+    try {
+      sessionStorage.setItem(`triarii-rolagem-${chaveAtual.current}`, String(Math.round(window.scrollY)));
+    } catch {
+      /* sem armazenamento: o voltar leva ao topo */
+    }
+  });
+  useEffect(() => {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    const guardar = guardarRolagem.current;
+    window.addEventListener('popstate', guardar);
+    window.addEventListener('pagehide', guardar);
+    return () => {
+      window.removeEventListener('popstate', guardar);
+      window.removeEventListener('pagehide', guardar);
+    };
+  }, []);
+
+  // A cada página: título, rolagem, foco, partículas, revelações e fim da transição.
   useEffect(() => {
     const rota = rotaDe(location.pathname);
     document.title = rota.titulo;
     document.querySelector('meta[name="description"]')?.setAttribute('content', rota.descricao);
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', rota.titulo);
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', rota.descricao);
 
-    if (!primeira.current || location.hash) rolarPara(location.hash, true);
+    const salvo = (() => {
+      try {
+        return sessionStorage.getItem(`triarii-rolagem-${location.key}`);
+      } catch {
+        return null;
+      }
+    })();
+    if (tipoNavegacao === 'POP' && salvo !== null && !primeira.current) {
+      estado.lenis?.resize();
+      if (estado.lenis) estado.lenis.scrollTo(Number(salvo), { immediate: true, force: true });
+      else window.scrollTo(0, Number(salvo));
+    } else if (!primeira.current || location.hash) {
+      rolarPara(location.hash, true);
+    }
+
+    // Leitores de tela e teclado: o foco vai para o título da página nova,
+    // que é anunciado, em vez de ficar no link clicado (que já não existe).
+    if (!primeira.current && !location.hash) {
+      const titulo = document.querySelector<HTMLElement>('main h1');
+      if (titulo) {
+        titulo.setAttribute('tabindex', '-1');
+        titulo.focus({ preventScroll: true });
+      }
+    }
+
     estado.palco?.recarregar();
     const limpar = estado.reduzido ? () => {} : iniciarRevelacoes();
 
@@ -91,7 +143,7 @@ export function App() {
     }
     primeira.current = false;
     return limpar;
-  }, [location.pathname]);
+  }, [location.pathname, location.key]);
 
   return (
     <>

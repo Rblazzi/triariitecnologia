@@ -2,7 +2,8 @@
 
 export const CONTATO = {
   email: 'suporte.triarii@gmail.com',
-  whatsapp: 'https://wa.me/5500000000000',
+  // Link do WhatsApp no formato https://wa.me/55DDDNUMERO. Vazio: o link não aparece no site.
+  whatsapp: '',
 };
 
 export const NAVEGACAO = [
@@ -198,6 +199,29 @@ export const NO_QUE_ACREDITAMOS: Principio[] = [
     titulo: 'Nada de dependência',
     texto:
       'Documentamos o que fazemos para que o seu time consiga seguir sem a gente, se um dia preferir.',
+  },
+];
+
+export interface Pessoa {
+  nome: string;
+  cargo: string;
+  linkedin: string;
+  // Caminho da foto dentro de public/ (ex.: '/equipe/caio.jpg'). Sem foto, aparecem as iniciais.
+  foto?: string;
+}
+
+export const EQUIPE: Pessoa[] = [
+  {
+    nome: 'Caio Cunha',
+    cargo: 'Sócio-fundador',
+    linkedin: 'https://www.linkedin.com/in/itscaiocunha/',
+    foto: '/equipe/caio.jpg',
+  },
+  {
+    nome: 'Rafael Blazzi',
+    cargo: 'Sócio-fundador',
+    linkedin: 'https://www.linkedin.com/in/rafaelblazzi/',
+    foto: '/equipe/rafael.jpg',
   },
 ];
 

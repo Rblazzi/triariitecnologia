@@ -1,6 +1,44 @@
 // Blocos de conteúdo usados tanto na home (resumo) quanto nas páginas internas (detalhe).
 
-import type { Etapa, Principio, Servico, Situacao } from '../dados/conteudo';
+import type { Etapa, Pessoa, Principio, Servico, Situacao } from '../dados/conteudo';
+
+const iniciais = (nome: string) =>
+  nome
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
+export function GradeEquipe({ pessoas }: { pessoas: Pessoa[] }) {
+  return (
+    <ul className="equipe__grade">
+      {pessoas.map((p) => (
+        <li className="pessoa revelar" key={p.nome}>
+          <div className="pessoa__foto">
+            {p.foto ? (
+              <img src={p.foto} alt={`Foto de ${p.nome}`} loading="lazy" width={320} height={320} />
+            ) : (
+              <span className="pessoa__iniciais" aria-hidden="true">
+                {iniciais(p.nome)}
+              </span>
+            )}
+            <span className="pessoa__varredura" aria-hidden="true" />
+            <span className="pessoa__moldura" aria-hidden="true" />
+          </div>
+          <div className="pessoa__texto">
+            <h3 className="pessoa__nome">{p.nome}</h3>
+            <p className="pessoa__cargo">{p.cargo}</p>
+            <a className="link-mais" href={p.linkedin} target="_blank" rel="noopener noreferrer">
+              LinkedIn<span className="sr-only"> de {p.nome} (abre em nova aba)</span>
+            </a>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export function CartaoServico({ servico, detalhado = false }: { servico: Servico; detalhado?: boolean }) {
   const Titulo = detalhado ? 'h2' : 'h3';

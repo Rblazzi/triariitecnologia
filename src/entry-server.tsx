@@ -4,6 +4,7 @@ import { StaticRouter } from 'react-router';
 import { App } from './App';
 
 export { ROTA_404, ROTAS } from './rotas';
+export { CONTATO, EQUIPE } from './dados/conteudo';
 
 export function renderizar(url: string): string {
   return renderToString(
